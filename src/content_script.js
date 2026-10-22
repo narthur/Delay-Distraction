@@ -27,7 +27,7 @@ function main() {
   const show = () => root.style.removeProperty('visibility');
   getWaitTime(window.location.href).then(waitTime => {
     if (waitTime) {
-      showCountdown(waitTime);
+      showCountdown(waitTime, show);
     } else {
       show();
     }
@@ -55,7 +55,16 @@ async function getWaitTime(url) {
 }
 
 // Stop the real page, show a countdown, then reload it once the delay is over.
-function showCountdown(delayInSeconds) {
+function showCountdown(delayInSeconds, show) {
+  // Readable isn't always writable (e.g. a full quota). Without the bypass write the
+  // reload would loop forever, so check it works before replacing the page.
+  try {
+    sessionStorage.setItem(BYPASS_KEY, window.location.href);
+    sessionStorage.removeItem(BYPASS_KEY);
+  } catch {
+    show();
+    return;
+  }
   window.stop();
   const root = document.documentElement;
   root.replaceChildren(); // drop whatever was parsed before stop()
