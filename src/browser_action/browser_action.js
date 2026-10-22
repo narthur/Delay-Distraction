@@ -19,7 +19,7 @@ function updateButtonState(enabled) {
 
 async function main() {
   getExtensionData(ENABLED_KEY).then(isEnabled => {
-    isDelayEnabled = isEnabled;
+    isDelayEnabled = isEnabled !== false; // unset = enabled (fresh install)
     // Update button state to match current enable status
     updateButtonState(isDelayEnabled);
     // Add event listener for enable/disable and config
