@@ -88,6 +88,7 @@ function changeValidation(input, isValid) {
     input.addClass("is-invalid");
     input.removeClass("is-valid");
   }
+  input.attr("aria-invalid", String(!isValid));
 }
 
 // Clear input and validation
@@ -95,6 +96,7 @@ function clearInput(input) {
   input.val("");
   input.removeClass("is-valid");
   input.removeClass("is-invalid");
+  input.removeAttr("aria-invalid");
 }
 
 // Executable on document ready

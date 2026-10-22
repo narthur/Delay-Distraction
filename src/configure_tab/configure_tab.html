@@ -36,7 +36,9 @@
           <input id="new-entry-val"
                  type="text"
                  class="form-control"
-                 placeholder="facebook.com">
+                 aria-describedby="new-entry-val-feedback"
+                 placeholder="e.g. facebook.com">
+          <div id="new-entry-val-feedback" class="invalid-feedback" role="alert">Enter all or part of a site address.</div>
         </div>
       </td>
       <td>
@@ -45,7 +47,9 @@
             <input id="new-entry-delay"
                    type="number"
                    class="form-control"
-                   placeholder="5">
+                   aria-describedby="new-entry-delay-feedback"
+                   placeholder="e.g. 5">
+            <div id="new-entry-delay-feedback" class="invalid-feedback" role="alert">Enter a number of seconds greater than 0.</div>
           </div>
           <button class="btn btn-outline-success btn-small add">Add</button>
         </div>

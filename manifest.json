@@ -26,5 +26,10 @@
     "default_icon": "icons/browser_action_icon.png",
     "default_title": "DelayDistraction",
     "default_popup": "src/browser_action/browser_action.html"
+  },
+  "background": {
+    "scripts": [
+      "src/background.js"
+    ]
   }
 }
