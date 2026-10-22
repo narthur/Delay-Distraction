@@ -68,7 +68,7 @@ function showCountdown(delayInSeconds, show) {
   window.stop();
   const root = document.documentElement;
   root.replaceChildren(); // drop whatever was parsed before stop()
-  root.style.removeProperty('visibility');
+  show();
   root.style.colorScheme = 'light dark';
   const body = document.createElement('body');
   body.style.cssText = 'margin:0;height:100vh;display:flex;flex-direction:column;gap:1em;' +
@@ -85,7 +85,13 @@ function showCountdown(delayInSeconds, show) {
   const tick = () => {
     const left = Math.ceil((end - Date.now()) / 1000);
     if (left <= 0) {
-      try { sessionStorage.setItem(BYPASS_KEY, window.location.href); } catch {}
+      try {
+        sessionStorage.setItem(BYPASS_KEY, window.location.href);
+      } catch {
+        // Storage filled up during the countdown; reloading would just start it again.
+        message.textContent = `${window.location.hostname} can't load: its storage is full.`;
+        return;
+      }
       window.location.reload();
       return;
     }
