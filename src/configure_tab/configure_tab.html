@@ -16,9 +16,10 @@
 <div class="header">
   <h1 class="header-title">Configure</h1>
   <br>
-  <p>The extension will match any links that match all or part of phrases entered below.</p>
-  <p>For example, "facebook" will result in added load times to "www.facebook.com" and
-    "facebook.com/example_link"</p>
+  <p>The extension will match pages on the site addresses entered below.</p>
+  <p>For example, "facebook.com" will result in added load times to "facebook.com",
+    "www.facebook.com" and "facebook.com/example_link", but not "m.facebook.com". Add a path such as
+    "youtube.com/shorts" to match only that part of a site.</p>
 </div>
 <div class="configure-body">
   <table class="table table-borderless">
@@ -38,7 +39,7 @@
                  class="form-control"
                  aria-describedby="new-entry-val-feedback"
                  placeholder="e.g. facebook.com">
-          <div id="new-entry-val-feedback" class="invalid-feedback" role="alert">Enter all or part of a site address.</div>
+          <div id="new-entry-val-feedback" class="invalid-feedback" role="alert">Enter a site address, e.g. example.com or example.com/path.</div>
         </div>
       </td>
       <td>

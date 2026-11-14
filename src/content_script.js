@@ -45,7 +45,7 @@ async function getWaitTime(url) {
   let delayTimes = await getExtensionData(ENTRIES_KEY);
   let isEnabled = await getExtensionData(ENABLED_KEY);
   if (delayTimes && isEnabled !== false) { // unset = enabled (fresh install)
-    let entry = delayTimes.find(item => url.toLowerCase().includes(item[ENTRY_KEY].toLowerCase()));
+    let entry = delayTimes.find(item => entryMatchesUrl(item[ENTRY_KEY], url));
     if (entry) {
       const delay = Number(entry[DELAY_KEY]);
       return Number.isFinite(delay) && delay > 0 ? delay : 0;
@@ -81,9 +81,20 @@ function showCountdown(delayInSeconds, show) {
   body.append(message, nevermind);
   root.append(body);
 
-  const end = Date.now() + delayInSeconds * 1000;
+  // Only count while the tab is visible, so the delay can't expire unseen. A tab opened
+  // in the background starts counting when first shown.
+  let remainingMs = delayInSeconds * 1000;
+  let lastTick = Date.now();
+  let timer = null;
   const tick = () => {
-    const left = Math.ceil((end - Date.now()) / 1000);
+    const now = Date.now();
+    if (!document.hidden) remainingMs -= now - lastTick;
+    lastTick = now;
+    if (document.hidden) {
+      timer = null; // paused; visibilitychange restarts it
+      return;
+    }
+    const left = Math.ceil(remainingMs / 1000);
     if (left <= 0) {
       try {
         sessionStorage.setItem(BYPASS_KEY, window.location.href);
@@ -96,8 +107,13 @@ function showCountdown(delayInSeconds, show) {
       return;
     }
     message.textContent = `${window.location.hostname} loads in ${left}…`;
-    setTimeout(tick, 250);
+    timer = setTimeout(tick, 250);
   };
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden || timer !== null) return;
+    lastTick = Date.now();
+    tick();
+  });
   tick();
 }
 
