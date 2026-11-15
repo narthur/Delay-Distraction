@@ -17,6 +17,7 @@
         "<all_urls>"
       ],
       "js": [
+        "src/match.js",
         "src/content_script.js"
       ],
       "run_at": "document_start"
